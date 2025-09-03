@@ -237,7 +237,7 @@ const ContactForm = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-aurora-night/50 border border-aurora-purple/20 rounded-lg text-aurora-text placeholder-aurora-muted focus:outline-none focus:border-aurora-purple focus:ring-1 focus:ring-aurora-purple transition-colors duration-300"
+                  className="w-full px-4 py-3 bg-aurora-night/50 border border-aurora-purple/20 rounded-lg text-aurora-text placeholder-aurora-muted focus:outline-none focus:border-aurora-purple focus:ring-2 focus:ring-aurora-purple/50 focus:shadow-lg focus:shadow-aurora-purple/25 transition-all duration-300"
                   placeholder="Enter your name"
                 />
               </div>
@@ -256,7 +256,7 @@ const ContactForm = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-aurora-night/50 border border-aurora-purple/20 rounded-lg text-aurora-text placeholder-aurora-muted focus:outline-none focus:border-aurora-purple focus:ring-1 focus:ring-aurora-purple transition-colors duration-300"
+                  className="w-full px-4 py-3 bg-aurora-night/50 border border-aurora-purple/20 rounded-lg text-aurora-text placeholder-aurora-muted focus:outline-none focus:border-aurora-purple focus:ring-2 focus:ring-aurora-purple/50 focus:shadow-lg focus:shadow-aurora-purple/25 transition-all duration-300"
                   placeholder="Enter your email"
                 />
               </div>
@@ -275,7 +275,7 @@ const ContactForm = () => {
                   onChange={handleChange}
                   required
                   rows={5}
-                  className="w-full px-4 py-3 bg-aurora-night/50 border border-aurora-purple/20 rounded-lg text-aurora-text placeholder-aurora-muted focus:outline-none focus:border-aurora-purple focus:ring-1 focus:ring-aurora-purple transition-colors duration-300 resize-none"
+                  className="w-full px-4 py-3 bg-aurora-night/50 border border-aurora-purple/20 rounded-lg text-aurora-text placeholder-aurora-muted focus:outline-none focus:border-aurora-purple focus:ring-2 focus:ring-aurora-purple/50 focus:shadow-lg focus:shadow-aurora-purple/25 transition-all duration-300 resize-none"
                   placeholder="Tell me about your project or just say hello..."
                 />
               </div>

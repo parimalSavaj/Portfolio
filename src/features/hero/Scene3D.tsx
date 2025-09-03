@@ -1,10 +1,23 @@
 import React from "react";
+import { useMousePosition } from "../../hooks/useMousePosition";
 
 const Scene3D = () => {
+  const mousePosition = useMousePosition(true);
+
+  // Calculate parallax rotation (dramatic effect for testing)
+  const rotateX = mousePosition.y * -30; // Inverted for natural feel
+  const rotateY = mousePosition.x * 30;
+
   return (
     <div className="w-full h-full flex items-center justify-center">
       {/* CSS-only 3D Aurora Object */}
-      <div className="relative">
+      <div
+        className="relative transition-transform duration-100 ease-out"
+        style={{
+          transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+          transformStyle: "preserve-3d",
+        }}
+      >
         {/* Main Aurora Shape */}
         <div
           className="w-32 h-32 relative animate-spin"

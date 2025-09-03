@@ -1,13 +1,9 @@
 import React from "react";
 import { personalInfo } from "../../lib/data";
+import { useSmoothScroll } from "../../hooks/useSmoothScroll";
 
 const Header = () => {
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const { scrollToSection, scrollToTop } = useSmoothScroll({ offset: 80 });
 
   return (
     <header className="sticky top-0 z-50 bg-aurora-night/95 backdrop-blur-sm border-b border-aurora-purple/20">
@@ -15,7 +11,10 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <h1 className="text-xl font-bold text-aurora-text hover:text-aurora-purple transition-colors duration-300 cursor-pointer">
+            <h1
+              onClick={scrollToTop}
+              className="text-xl font-bold text-aurora-text hover:text-aurora-purple transition-colors duration-300 cursor-pointer"
+            >
               {personalInfo.name}
             </h1>
           </div>

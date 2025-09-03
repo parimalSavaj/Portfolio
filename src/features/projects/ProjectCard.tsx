@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 
 interface Project {
@@ -18,12 +18,21 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.1,
+        ease: "easeOut",
+      }}
       viewport={{ once: true }}
-      whileHover={{ y: -5 }}
+      whileHover={{
+        y: -8,
+        scale: 1.03,
+        boxShadow: "0 20px 40px rgba(168, 85, 247, 0.15)",
+        transition: { duration: 0.3, ease: "easeOut" },
+      }}
       className="group relative"
     >
-      <div className="h-full bg-aurora-night/50 backdrop-blur-sm border border-aurora-blue/20 rounded-xl p-6 hover:border-aurora-blue/50 transition-all duration-300 hover:shadow-lg hover:shadow-aurora-purple/10">
+      <div className="h-full bg-aurora-night/50 backdrop-blur-sm border border-aurora-blue/20 rounded-xl p-6 hover:border-aurora-purple/50 transition-all duration-300">
         {/* Project Header */}
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">

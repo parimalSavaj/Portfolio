@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { personalInfo } from "../../lib/data";
 import Scene3D from "./Scene3D";
+import { useSmoothScroll } from "../../hooks/useSmoothScroll";
 
 const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
+  const { scrollToSection } = useSmoothScroll({ offset: 80 });
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -29,7 +31,7 @@ const Hero = () => {
       y: 0,
       transition: {
         duration: 0.8,
-        ease: "easeOut",
+        ease: "easeOut" as const,
       },
     },
   };
@@ -53,7 +55,7 @@ const Hero = () => {
       </div>
 
       {/* 3D Scene - Positioned on the right side */}
-      <div className="absolute top-0 right-0 w-1/2 h-full opacity-60 pointer-events-none hidden lg:block">
+      <div className="absolute top-0 right-0 w-1/2 h-full opacity-60 hidden lg:block">
         <Scene3D />
       </div>
 
@@ -96,11 +98,7 @@ const Hero = () => {
               className="flex flex-col sm:flex-row gap-4 items-start"
             >
               <button
-                onClick={() =>
-                  document
-                    .getElementById("projects")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
+                onClick={() => scrollToSection("projects")}
                 className="px-6 py-3 bg-gradient-to-r from-aurora-purple to-aurora-blue text-white font-semibold rounded-lg hover:scale-105 transition-transform duration-300 shadow-lg hover:shadow-aurora-purple/25"
               >
                 View My Projects

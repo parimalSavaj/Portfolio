@@ -7,6 +7,7 @@ import ContactForm from "./features/contact/ContactForm";
 import Footer from "./features/footer/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import SEOHead from "./components/SEOHead";
+import CustomCursor from "./components/CustomCursor";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       </main>
       <Footer />
       <ScrollToTop />
+      <CustomCursor />
     </div>
   );
 }

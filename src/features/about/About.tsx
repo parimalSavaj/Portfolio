@@ -1,8 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { personalInfo } from "../../lib/data";
+import { useSmoothScroll } from "../../hooks/useSmoothScroll";
 
 const About = () => {
+  const { scrollToSection } = useSmoothScroll({ offset: 80 });
+
   return (
     <section
       id="about"
@@ -36,31 +39,44 @@ const About = () => {
             className="order-2 lg:order-1"
           >
             <div className="relative">
-              {/* Profile Photo Placeholder */}
-              <div className="relative w-80 h-80 mx-auto lg:w-96 lg:h-96">
-                <div className="absolute inset-0 bg-gradient-to-br from-aurora-purple to-aurora-blue rounded-2xl"></div>
-                <div className="absolute inset-2 bg-aurora-night rounded-2xl flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-aurora-purple to-aurora-blue rounded-full flex items-center justify-center">
-                      <span className="text-4xl font-bold text-white">
+              {/* Professional Photo Container */}
+              <div className="relative w-60 h-60 sm:w-64 sm:h-64 md:w-72 md:h-72 mx-auto">
+                {/* Photo Container with Aurora Border */}
+                <div className="relative w-full h-full bg-aurora-night rounded-2xl overflow-hidden border-2 border-aurora-purple/30 shadow-xl shadow-aurora-purple/20">
+                  {/* Replace this div with img tag when you have a professional photo */}
+                  {/* <img 
+                    src="/assets/professional-photo.jpg" 
+                    alt={`${personalInfo.name} - Professional Portrait`}
+                    className="w-full h-full object-cover"
+                  /> */}
+
+                  {/* Temporary Professional Placeholder */}
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-aurora-night relative">
+                    {/* Avatar Circle */}
+                    <div className="w-20 h-20 bg-gradient-to-br from-aurora-purple to-aurora-blue rounded-full flex items-center justify-center shadow-lg shadow-aurora-purple/25 mb-3">
+                      <span className="text-xl font-bold text-white">
                         {personalInfo.name
                           .split(" ")
                           .map((n) => n[0])
                           .join("")}
                       </span>
                     </div>
-                    <p className="text-aurora-muted text-sm">
-                      Professional Photo
-                      <br />
-                      Coming Soon
-                    </p>
+
+                    {/* Text Content */}
+                    <div className="text-center space-y-1 px-4">
+                      <p className="text-aurora-text font-semibold text-sm">
+                        {personalInfo.name}
+                      </p>
+                      <p className="text-aurora-muted text-xs">
+                        Professional Photo
+                      </p>
+                      <p className="text-aurora-purple text-xs font-medium">
+                        Ready for Upload
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-
-              {/* Decorative Elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-aurora-purple/20 rounded-full blur-xl"></div>
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-aurora-blue/20 rounded-full blur-xl"></div>
             </div>
           </motion.div>
 
@@ -125,11 +141,7 @@ const About = () => {
             {/* Contact CTA */}
             <div className="pt-6">
               <motion.button
-                onClick={() =>
-                  document
-                    .getElementById("contact")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
+                onClick={() => scrollToSection("contact")}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-6 py-3 bg-gradient-to-r from-aurora-purple to-aurora-blue text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-aurora-purple/25 transition-all duration-300"

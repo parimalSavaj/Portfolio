@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
 const CustomCursor = () => {
@@ -62,14 +62,10 @@ const CustomCursor = () => {
 
   const cursorVariants = {
     default: {
-      x: mousePosition.x - 6,
-      y: mousePosition.y - 6,
       scale: 1,
       opacity: isVisible ? 1 : 0,
     },
     hover: {
-      x: mousePosition.x - 8,
-      y: mousePosition.y - 8,
       scale: 1.5,
       opacity: isVisible ? 0.9 : 0,
     },
@@ -77,14 +73,10 @@ const CustomCursor = () => {
 
   const trailVariants = {
     default: {
-      x: mousePosition.x - 16,
-      y: mousePosition.y - 16,
       scale: 1,
       opacity: isVisible ? 0.5 : 0,
     },
     hover: {
-      x: mousePosition.x - 20,
-      y: mousePosition.y - 20,
       scale: 1.3,
       opacity: isVisible ? 0.3 : 0,
     },
@@ -110,13 +102,16 @@ const CustomCursor = () => {
       {/* Main Cursor Dot */}
       <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[9999]"
-        animate={isHovering ? "hover" : "default"}
-        variants={cursorVariants}
+        animate={{
+          x: mousePosition.x - 6,
+          y: mousePosition.y - 6,
+          ...(isHovering ? cursorVariants.hover : cursorVariants.default),
+        }}
         transition={{
-          type: "spring",
-          stiffness: 400,
-          damping: 25,
-          mass: 0.3,
+          x: { type: "spring", stiffness: 800, damping: 35, mass: 0.2 },
+          y: { type: "spring", stiffness: 800, damping: 35, mass: 0.2 },
+          scale: { type: "spring", stiffness: 400, damping: 25, mass: 0.3 },
+          opacity: { duration: 0.15 },
         }}
       >
         <div className="w-3 h-3 bg-aurora-purple rounded-full shadow-lg shadow-aurora-purple/40" />
@@ -125,13 +120,16 @@ const CustomCursor = () => {
       {/* Trailing Circle */}
       <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[9998]"
-        animate={isHovering ? "hover" : "default"}
-        variants={trailVariants}
+        animate={{
+          x: mousePosition.x - 16,
+          y: mousePosition.y - 16,
+          ...(isHovering ? trailVariants.hover : trailVariants.default),
+        }}
         transition={{
-          type: "spring",
-          stiffness: 120,
-          damping: 20,
-          mass: 0.2,
+          x: { type: "spring", stiffness: 150, damping: 25, mass: 0.5 },
+          y: { type: "spring", stiffness: 150, damping: 25, mass: 0.5 },
+          scale: { type: "spring", stiffness: 300, damping: 20, mass: 0.4 },
+          opacity: { duration: 0.2 },
         }}
       >
         <div className="w-8 h-8 border-2 border-aurora-blue rounded-full shadow-lg shadow-aurora-blue/20" />
@@ -150,9 +148,10 @@ const CustomCursor = () => {
           }}
           exit={{ opacity: 0, scale: 0 }}
           transition={{
-            type: "spring",
-            stiffness: 80,
-            damping: 15,
+            x: { type: "spring", stiffness: 100, damping: 20, mass: 0.6 },
+            y: { type: "spring", stiffness: 100, damping: 20, mass: 0.6 },
+            scale: { type: "spring", stiffness: 200, damping: 15, mass: 0.3 },
+            opacity: { duration: 0.2 },
           }}
         >
           <div className="w-12 h-12 bg-gradient-to-r from-aurora-purple/30 to-aurora-blue/30 rounded-full blur-md" />

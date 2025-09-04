@@ -5,10 +5,7 @@ import ProjectCard from "./ProjectCard";
 
 const ProjectsGrid = () => {
   return (
-    <section
-      id="projects"
-      className="py-16 bg-gradient-to-b from-aurora-night/95 to-aurora-night"
-    >
+    <section id="projects" className="py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title */}
         <motion.div

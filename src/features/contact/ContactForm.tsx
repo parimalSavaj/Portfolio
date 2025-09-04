@@ -107,10 +107,7 @@ const ContactForm = () => {
 
   if (isSubmitted) {
     return (
-      <section
-        id="contact"
-        className="py-16 bg-gradient-to-b from-aurora-night/95 to-aurora-night"
-      >
+      <section id="contact" className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -152,10 +149,7 @@ const ContactForm = () => {
   }
 
   return (
-    <section
-      id="contact"
-      className="py-16 bg-gradient-to-b from-aurora-night/95 to-aurora-night"
-    >
+    <section id="contact" className="py-16">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title */}
         <motion.div

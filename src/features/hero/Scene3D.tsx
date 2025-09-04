@@ -1,122 +1,127 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Sphere } from "@react-three/drei";
 import * as THREE from "three";
 
-// Enhanced Globe component with visible effects
-const Globe = () => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const atmosphereRef = useRef<THREE.Mesh>(null);
-  const outerGlowRef = useRef<THREE.Mesh>(null);
+// Noise function for organic displacement
+const noiseVertexShader = `
+  uniform float uTime;
+  uniform float uIntensity;
+  
+  // Simple noise function
+  float noise(vec3 position) {
+    return sin(position.x * 10.0) * sin(position.y * 10.0) * sin(position.z * 10.0);
+  }
+  
+  // More complex 3D noise
+  float turbulence(vec3 position) {
+    float value = 0.0;
+    float amplitude = 1.0;
+    float frequency = 0.5;
+    
+    for(int i = 0; i < 4; i++) {
+      value += amplitude * noise(position * frequency + uTime * 0.1);
+      amplitude *= 0.5;
+      frequency *= 2.0;
+    }
+    return value;
+  }
+  
+  void main() {
+    vec3 pos = position;
+    
+    // Apply time-based displacement using noise
+    float displacement = turbulence(pos + uTime * 0.3) * uIntensity;
+    
+    // Normalize and apply displacement
+    vec3 newPosition = pos + normalize(pos) * displacement;
+    
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+  }
+`;
 
-  // Auto-rotation with different speeds for dynamic effect
-  useFrame((state, delta) => {
+// Iridescent fragment shader
+const iridescenceFragmentShader = `
+  uniform float uTime;
+  uniform vec3 uColor1;
+  uniform vec3 uColor2;
+  uniform vec3 uColor3;
+  
+  void main() {
+    // Create iridescent effect based on viewing angle and time
+    vec2 uv = gl_FragCoord.xy / vec2(800.0, 600.0);
+    
+    // Time-based color shifting
+    float timeShift = sin(uTime * 0.5) * 0.5 + 0.5;
+    
+    // Create color gradient
+    vec3 color1 = mix(uColor1, uColor2, timeShift);
+    vec3 color2 = mix(uColor2, uColor3, sin(uTime * 0.7) * 0.5 + 0.5);
+    
+    // Gradient based on UV coordinates
+    vec3 finalColor = mix(color1, color2, uv.y);
+    
+    // Add shimmer effect
+    float shimmer = sin(uv.x * 20.0 + uTime * 2.0) * sin(uv.y * 20.0 + uTime * 1.5) * 0.1 + 0.9;
+    finalColor *= shimmer;
+    
+    gl_FragColor = vec4(finalColor, 1.0);
+  }
+`;
+
+// Generative Art Blob Component
+const GenerativeBlob = () => {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<THREE.ShaderMaterial>(null);
+
+  // Shader uniforms
+  const uniforms = {
+    uTime: { value: 0 },
+    uIntensity: { value: 0.3 },
+    uColor1: { value: new THREE.Color("#a855f7") }, // Aurora purple
+    uColor2: { value: new THREE.Color("#3b82f6") }, // Aurora blue
+    uColor3: { value: new THREE.Color("#ec4899") }, // Aurora pink
+  };
+
+  // Animation loop
+  useFrame((state) => {
+    if (materialRef.current) {
+      materialRef.current.uniforms.uTime.value = state.clock.getElapsedTime();
+    }
+
     if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.3; // Faster rotation
-      meshRef.current.rotation.x += delta * 0.1; // Slight tilt animation
-    }
-    if (atmosphereRef.current) {
-      atmosphereRef.current.rotation.y -= delta * 0.2; // Counter-rotation
-    }
-    if (outerGlowRef.current) {
-      outerGlowRef.current.rotation.y += delta * 0.5; // Fastest rotation
+      // Slow rotation
+      meshRef.current.rotation.x += 0.005;
+      meshRef.current.rotation.y += 0.008;
     }
   });
 
   return (
-    <>
-      {/* Main Globe - Much brighter and more visible */}
-      <Sphere ref={meshRef} args={[1.8, 64, 64]} position={[0, 0, 0]}>
-        <meshStandardMaterial
-          color="#4f46e5"
-          roughness={0.3}
-          metalness={0.7}
-          emissive="#a855f7"
-          emissiveIntensity={0.3}
-        />
-      </Sphere>
-
-      {/* Inner Atmosphere - More visible */}
-      <Sphere ref={atmosphereRef} args={[2.1, 32, 32]} position={[0, 0, 0]}>
-        <meshBasicMaterial
-          color="#a855f7"
-          transparent
-          opacity={0.4}
-          side={THREE.BackSide}
-        />
-      </Sphere>
-
-      {/* Outer Glow - Enhanced visibility */}
-      <Sphere ref={outerGlowRef} args={[2.5, 32, 32]} position={[0, 0, 0]}>
-        <meshBasicMaterial
-          color="#3b82f6"
-          transparent
-          opacity={0.2}
-          side={THREE.BackSide}
-        />
-      </Sphere>
-
-      {/* Additional Visual Effects */}
-      {/* Wireframe overlay for tech aesthetic */}
-      <Sphere args={[1.9, 16, 16]} position={[0, 0, 0]}>
-        <meshBasicMaterial
-          color="#ffffff"
-          wireframe
-          transparent
-          opacity={0.1}
-        />
-      </Sphere>
-
-      {/* Floating particles around globe */}
-      {[...Array(12)].map((_, i) => {
-        const angle = (i / 12) * Math.PI * 2;
-        const radius = 3.5;
-        const x = Math.cos(angle) * radius;
-        const z = Math.sin(angle) * radius;
-        const y = Math.sin(i * 0.5) * 2;
-
-        return (
-          <Sphere key={i} args={[0.05, 8, 8]} position={[x, y, z]}>
-            <meshBasicMaterial
-              color={i % 2 === 0 ? "#a855f7" : "#3b82f6"}
-              transparent
-              opacity={0.8}
-            />
-          </Sphere>
-        );
-      })}
-    </>
+    <mesh ref={meshRef}>
+      <sphereGeometry args={[2, 128, 128]} />
+      <shaderMaterial
+        ref={materialRef}
+        vertexShader={noiseVertexShader}
+        fragmentShader={iridescenceFragmentShader}
+        uniforms={uniforms}
+        wireframe={false}
+      />
+    </mesh>
   );
 };
 
 const Scene3D = () => {
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <div className="w-64 h-64 md:w-80 md:h-80">
+      <div className="w-full h-full min-h-[300px]">
         <Canvas
-          camera={{ position: [0, 0, 7], fov: 50 }}
+          camera={{ position: [0, 0, 5], fov: 45 }}
           style={{ background: "transparent" }}
         >
-          {/* Enhanced Lighting Setup */}
-          <ambientLight intensity={0.6} color="#ffffff" />
-          <pointLight position={[5, 5, 5]} intensity={1.5} color="#ffffff" />
-          <pointLight position={[-5, -5, 5]} intensity={0.8} color="#a855f7" />
-          <pointLight position={[0, 0, -5]} intensity={0.6} color="#3b82f6" />
+          {/* Minimal Lighting for Shader Material */}
+          <ambientLight intensity={0.2} />
 
-          {/* Globe */}
-          <Globe />
-
-          {/* Interactive Controls */}
-          <OrbitControls
-            enableZoom={false}
-            enablePan={false}
-            enableRotate={true}
-            autoRotate={true}
-            autoRotateSpeed={0.5}
-            rotateSpeed={0.8}
-            dampingFactor={0.03}
-            enableDamping
-          />
+          {/* Generative Art Blob */}
+          <GenerativeBlob />
         </Canvas>
       </div>
     </div>

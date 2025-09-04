@@ -7,7 +7,7 @@ const ProjectsGrid = () => {
   return (
     <section
       id="projects"
-      className="py-20 bg-gradient-to-b from-aurora-night/95 to-aurora-night"
+      className="py-16 bg-gradient-to-b from-aurora-night/95 to-aurora-night"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title */}

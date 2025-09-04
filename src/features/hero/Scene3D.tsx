@@ -1,78 +1,124 @@
-import React from "react";
-import { useMousePosition } from "../../hooks/useMousePosition";
+import React, { useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, Sphere } from "@react-three/drei";
+import * as THREE from "three";
 
-const Scene3D = () => {
-  const mousePosition = useMousePosition(true);
+// Enhanced Globe component with visible effects
+const Globe = () => {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const atmosphereRef = useRef<THREE.Mesh>(null);
+  const outerGlowRef = useRef<THREE.Mesh>(null);
 
-  // Calculate parallax rotation (dramatic effect for testing)
-  const rotateX = mousePosition.y * -30; // Inverted for natural feel
-  const rotateY = mousePosition.x * 30;
+  // Auto-rotation with different speeds for dynamic effect
+  useFrame((state, delta) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y += delta * 0.3; // Faster rotation
+      meshRef.current.rotation.x += delta * 0.1; // Slight tilt animation
+    }
+    if (atmosphereRef.current) {
+      atmosphereRef.current.rotation.y -= delta * 0.2; // Counter-rotation
+    }
+    if (outerGlowRef.current) {
+      outerGlowRef.current.rotation.y += delta * 0.5; // Fastest rotation
+    }
+  });
 
   return (
+    <>
+      {/* Main Globe - Much brighter and more visible */}
+      <Sphere ref={meshRef} args={[1.8, 64, 64]} position={[0, 0, 0]}>
+        <meshStandardMaterial
+          color="#4f46e5"
+          roughness={0.3}
+          metalness={0.7}
+          emissive="#a855f7"
+          emissiveIntensity={0.3}
+        />
+      </Sphere>
+
+      {/* Inner Atmosphere - More visible */}
+      <Sphere ref={atmosphereRef} args={[2.1, 32, 32]} position={[0, 0, 0]}>
+        <meshBasicMaterial
+          color="#a855f7"
+          transparent
+          opacity={0.4}
+          side={THREE.BackSide}
+        />
+      </Sphere>
+
+      {/* Outer Glow - Enhanced visibility */}
+      <Sphere ref={outerGlowRef} args={[2.5, 32, 32]} position={[0, 0, 0]}>
+        <meshBasicMaterial
+          color="#3b82f6"
+          transparent
+          opacity={0.2}
+          side={THREE.BackSide}
+        />
+      </Sphere>
+
+      {/* Additional Visual Effects */}
+      {/* Wireframe overlay for tech aesthetic */}
+      <Sphere args={[1.9, 16, 16]} position={[0, 0, 0]}>
+        <meshBasicMaterial
+          color="#ffffff"
+          wireframe
+          transparent
+          opacity={0.1}
+        />
+      </Sphere>
+
+      {/* Floating particles around globe */}
+      {[...Array(12)].map((_, i) => {
+        const angle = (i / 12) * Math.PI * 2;
+        const radius = 3.5;
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius;
+        const y = Math.sin(i * 0.5) * 2;
+
+        return (
+          <Sphere key={i} args={[0.05, 8, 8]} position={[x, y, z]}>
+            <meshBasicMaterial
+              color={i % 2 === 0 ? "#a855f7" : "#3b82f6"}
+              transparent
+              opacity={0.8}
+            />
+          </Sphere>
+        );
+      })}
+    </>
+  );
+};
+
+const Scene3D = () => {
+  return (
     <div className="w-full h-full flex items-center justify-center">
-      {/* CSS-only 3D Aurora Object */}
-      <div
-        className="relative transition-transform duration-100 ease-out"
-        style={{
-          transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
-          transformStyle: "preserve-3d",
-        }}
-      >
-        {/* Main Aurora Shape */}
-        <div
-          className="w-32 h-32 relative animate-spin"
-          style={{
-            animation:
-              "spin 8s linear infinite, pulse 4s ease-in-out infinite alternate",
-          }}
+      <div className="w-64 h-64 md:w-80 md:h-80">
+        <Canvas
+          camera={{ position: [0, 0, 7], fov: 50 }}
+          style={{ background: "transparent" }}
         >
-          {/* Aurora Rings */}
-          <div className="absolute inset-0 border-4 border-aurora-purple rounded-full opacity-60 animate-ping"></div>
-          <div className="absolute inset-2 border-2 border-aurora-blue rounded-full opacity-40"></div>
-          <div className="absolute inset-4 border border-aurora-purple rounded-full opacity-80"></div>
+          {/* Enhanced Lighting Setup */}
+          <ambientLight intensity={0.6} color="#ffffff" />
+          <pointLight position={[5, 5, 5]} intensity={1.5} color="#ffffff" />
+          <pointLight position={[-5, -5, 5]} intensity={0.8} color="#a855f7" />
+          <pointLight position={[0, 0, -5]} intensity={0.6} color="#3b82f6" />
 
-          {/* Center Glow */}
-          <div className="absolute inset-8 bg-gradient-to-br from-aurora-purple to-aurora-blue rounded-full blur-sm opacity-60"></div>
-          <div className="absolute inset-10 bg-aurora-purple rounded-full animate-pulse"></div>
-        </div>
+          {/* Globe */}
+          <Globe />
 
-        {/* Floating Particles */}
-        {[...Array(8)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-2 h-2 bg-aurora-blue rounded-full opacity-60"
-            style={{
-              top: `${20 + Math.sin(i * 0.8) * 40}%`,
-              left: `${20 + Math.cos(i * 0.8) * 40}%`,
-              animation: `float ${3 + i * 0.5}s ease-in-out infinite alternate`,
-              animationDelay: `${i * 0.2}s`,
-            }}
-          ></div>
-        ))}
-
-        {/* Orbiting Elements */}
-        <div
-          className="absolute inset-0 animate-spin"
-          style={{ animation: "spin 12s linear infinite reverse" }}
-        >
-          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-aurora-blue rounded-full opacity-80"></div>
-          <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-aurora-purple rounded-full opacity-60"></div>
-          <div className="absolute top-1/2 -left-2 transform -translate-y-1/2 w-2 h-2 bg-aurora-blue rounded-full opacity-70"></div>
-          <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 w-3 h-3 bg-aurora-purple rounded-full opacity-50"></div>
-        </div>
+          {/* Interactive Controls */}
+          <OrbitControls
+            enableZoom={false}
+            enablePan={false}
+            enableRotate={true}
+            autoRotate={true}
+            autoRotateSpeed={0.5}
+            rotateSpeed={0.8}
+            dampingFactor={0.03}
+            enableDamping
+          />
+        </Canvas>
       </div>
-
-      {/* CSS Keyframes */}
-      <style>{`
-        @keyframes float {
-          0% { transform: translateY(0px) scale(1); }
-          100% { transform: translateY(-10px) scale(1.1); }
-        }
-        @keyframes pulse {
-          0% { transform: scale(1); opacity: 0.6; }
-          100% { transform: scale(1.1); opacity: 0.8; }
-        }
-      `}</style>
     </div>
   );
 };

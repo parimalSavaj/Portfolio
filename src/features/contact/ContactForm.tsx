@@ -11,18 +11,72 @@ const ContactForm = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    // Clear error when user starts typing
+    if (errors[name as keyof typeof errors]) {
+      setErrors({
+        ...errors,
+        [name]: "",
+      });
+    }
+  };
+
+  // Validation function
+  const validateForm = () => {
+    const newErrors = {
+      name: "",
+      email: "",
+      message: "",
+    };
+
+    // Name validation
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = "Name must be at least 2 characters";
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    // Message validation
+    if (!formData.message.trim()) {
+      newErrors.message = "Message is required";
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = "Message must be at least 10 characters";
+    }
+
+    setErrors(newErrors);
+    return !newErrors.name && !newErrors.email && !newErrors.message;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate form before submitting
+    if (!validateForm()) {
+      return; // Stop submission if validation fails
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -55,7 +109,7 @@ const ContactForm = () => {
     return (
       <section
         id="contact"
-        className="py-20 bg-gradient-to-b from-aurora-night/95 to-aurora-night"
+        className="py-16 bg-gradient-to-b from-aurora-night/95 to-aurora-night"
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
@@ -100,7 +154,7 @@ const ContactForm = () => {
   return (
     <section
       id="contact"
-      className="py-20 bg-gradient-to-b from-aurora-night/95 to-aurora-night"
+      className="py-16 bg-gradient-to-b from-aurora-night/95 to-aurora-night"
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title */}
@@ -222,7 +276,7 @@ const ContactForm = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div>
                 <label
                   htmlFor="name"
@@ -237,9 +291,34 @@ const ContactForm = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-aurora-night/50 border border-aurora-purple/20 rounded-lg text-aurora-text placeholder-aurora-muted focus:outline-none focus:border-aurora-purple focus:ring-2 focus:ring-aurora-purple/50 focus:shadow-lg focus:shadow-aurora-purple/25 transition-all duration-300"
+                  className={`w-full px-4 py-3 bg-aurora-night/50 border rounded-lg text-aurora-text placeholder-aurora-muted focus:outline-none focus:ring-2 focus:shadow-lg transition-all duration-300 ${
+                    errors.name
+                      ? "border-red-400 focus:border-red-400 focus:ring-red-400/50 focus:shadow-red-400/25"
+                      : "border-aurora-purple/20 focus:border-aurora-purple focus:ring-aurora-purple/50 focus:shadow-aurora-purple/25"
+                  }`}
                   placeholder="Enter your name"
                 />
+                {errors.name && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="mt-2 text-sm text-red-400 flex items-center"
+                  >
+                    <svg
+                      className="w-4 h-4 mr-1 flex-shrink-0"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    {errors.name}
+                  </motion.p>
+                )}
               </div>
 
               <div>
@@ -256,9 +335,34 @@ const ContactForm = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-aurora-night/50 border border-aurora-purple/20 rounded-lg text-aurora-text placeholder-aurora-muted focus:outline-none focus:border-aurora-purple focus:ring-2 focus:ring-aurora-purple/50 focus:shadow-lg focus:shadow-aurora-purple/25 transition-all duration-300"
+                  className={`w-full px-4 py-3 bg-aurora-night/50 border rounded-lg text-aurora-text placeholder-aurora-muted focus:outline-none focus:ring-2 focus:shadow-lg transition-all duration-300 ${
+                    errors.email
+                      ? "border-red-400 focus:border-red-400 focus:ring-red-400/50 focus:shadow-red-400/25"
+                      : "border-aurora-purple/20 focus:border-aurora-purple focus:ring-aurora-purple/50 focus:shadow-aurora-purple/25"
+                  }`}
                   placeholder="Enter your email"
                 />
+                {errors.email && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="mt-2 text-sm text-red-400 flex items-center"
+                  >
+                    <svg
+                      className="w-4 h-4 mr-1 flex-shrink-0"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    {errors.email}
+                  </motion.p>
+                )}
               </div>
 
               <div>
@@ -275,9 +379,34 @@ const ContactForm = () => {
                   onChange={handleChange}
                   required
                   rows={5}
-                  className="w-full px-4 py-3 bg-aurora-night/50 border border-aurora-purple/20 rounded-lg text-aurora-text placeholder-aurora-muted focus:outline-none focus:border-aurora-purple focus:ring-2 focus:ring-aurora-purple/50 focus:shadow-lg focus:shadow-aurora-purple/25 transition-all duration-300 resize-none"
+                  className={`w-full px-4 py-3 bg-aurora-night/50 border rounded-lg text-aurora-text placeholder-aurora-muted focus:outline-none focus:ring-2 focus:shadow-lg transition-all duration-300 resize-none ${
+                    errors.message
+                      ? "border-red-400 focus:border-red-400 focus:ring-red-400/50 focus:shadow-red-400/25"
+                      : "border-aurora-purple/20 focus:border-aurora-purple focus:ring-aurora-purple/50 focus:shadow-aurora-purple/25"
+                  }`}
                   placeholder="Tell me about your project or just say hello..."
                 />
+                {errors.message && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="mt-2 text-sm text-red-400 flex items-center"
+                  >
+                    <svg
+                      className="w-4 h-4 mr-1 flex-shrink-0"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    {errors.message}
+                  </motion.p>
+                )}
               </div>
 
               <motion.button

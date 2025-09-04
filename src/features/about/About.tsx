@@ -9,7 +9,7 @@ const About = () => {
   return (
     <section
       id="about"
-      className="py-20 bg-gradient-to-b from-aurora-night to-aurora-night/95"
+      className="py-16 bg-gradient-to-b from-aurora-night to-aurora-night/95"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title */}

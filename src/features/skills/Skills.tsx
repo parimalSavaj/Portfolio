@@ -54,7 +54,7 @@ const Skills = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-aurora-night to-aurora-night/95">
+    <section className="py-16 bg-gradient-to-b from-aurora-night to-aurora-night/95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title */}
         <motion.div
@@ -88,7 +88,8 @@ const Skills = () => {
                 scale: 1.05,
                 boxShadow: "0 10px 25px rgba(168, 85, 247, 0.2)",
               }}
-              className="group relative"
+              className="group relative rounded-xl"
+              style={{ borderRadius: "0.75rem" }}
             >
               <div className="bg-aurora-night/50 backdrop-blur-sm border border-aurora-purple/20 rounded-xl p-4 md:p-6 text-center hover:border-aurora-purple/50 transition-all duration-300">
                 {/* Skill Icon */}

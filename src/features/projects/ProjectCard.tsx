@@ -30,7 +30,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         boxShadow: "0 20px 40px rgba(168, 85, 247, 0.15)",
         transition: { duration: 0.3, ease: "easeOut" },
       }}
-      className="group relative"
+      className="group relative rounded-xl"
+      style={{ borderRadius: "0.75rem" }}
     >
       <div className="h-full bg-aurora-night/50 backdrop-blur-sm border border-aurora-blue/20 rounded-xl p-6 hover:border-aurora-purple/50 transition-all duration-300">
         {/* Project Header */}

@@ -37,7 +37,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative h-[99vh] flex items-center justify-center py-16 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Animated Grid Background */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute inset-0 bg-gradient-to-r from-aurora-purple/10 to-aurora-blue/10"></div>
@@ -61,7 +61,7 @@ const Hero = () => {
 
       {/* Hero Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center min-h-screen">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center py-8">
           {/* Left Column - Text Content */}
           <motion.div
             variants={containerVariants}

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import LoadingSpinner from "../../components/LoadingSpinner";
 import { personalInfo } from "../../lib/data";
 
 const ContactForm = () => {

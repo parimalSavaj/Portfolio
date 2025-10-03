@@ -1,16 +1,20 @@
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import SEOHead from "../../components/SEOHead";
+import useScrollToTop from "../../hooks/useScrollToTop";
 import {
   getAllPosts,
   getBlogPostsByCategory,
   getCategoryBySlug,
-  blogCategories,
-  type BlogPost,
-} from "../../lib/blogData";
+} from "../../lib/blogUtils";
+import { blogCategories } from "../../lib/blogData";
+import type { BlogPost } from "../../lib/blogTypes";
 
 const BlogList = () => {
   const { category } = useParams<{ category?: string }>();
+
+  // Automatically scroll to top when route changes
+  useScrollToTop();
 
   // Get posts based on category or all posts
   const posts: BlogPost[] = category
@@ -69,7 +73,7 @@ const BlogList = () => {
             : "blog, web development, programming, javascript, nodejs, python"
         }
       />
-      <div className="min-h-screen bg-aurora-night pt-20 pb-16">
+      <div className="min-h-screen pt-20 pb-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header Section */}
           <motion.div

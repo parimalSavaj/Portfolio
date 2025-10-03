@@ -78,7 +78,7 @@ const Skills = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6"
+          className="flex flex-wrap justify-center gap-4 md:gap-6"
         >
           {skills.map((skill) => (
             <motion.div
@@ -88,7 +88,7 @@ const Skills = () => {
                 scale: 1.05,
                 boxShadow: "0 10px 25px rgba(168, 85, 247, 0.2)",
               }}
-              className="group relative rounded-xl"
+              className="group relative rounded-xl w-32 sm:w-36 md:w-40 flex-shrink-0"
               style={{ borderRadius: "0.75rem" }}
             >
               <div className="bg-aurora-night/50 backdrop-blur-sm border border-aurora-purple/20 rounded-xl p-4 md:p-6 text-center hover:border-aurora-purple/50 transition-all duration-300">

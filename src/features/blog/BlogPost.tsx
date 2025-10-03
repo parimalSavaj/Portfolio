@@ -2,15 +2,19 @@ import { useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import SEOHead from "../../components/SEOHead";
+import useScrollToTop from "../../hooks/useScrollToTop";
 import {
   getBlogPostBySlug,
   getCategoryBySlug,
   getBlogPostsByCategory,
-} from "../../lib/blogData";
+} from "../../lib/blogUtils";
 
 const BlogPost = () => {
   const { category, slug } = useParams<{ category: string; slug: string }>();
   const navigate = useNavigate();
+
+  // Automatically scroll to top when route changes
+  useScrollToTop();
 
   // Get the blog post
   const post = category && slug ? getBlogPostBySlug(category, slug) : null;
@@ -38,11 +42,6 @@ const BlogPost = () => {
       day: "numeric",
     });
   };
-
-  // Scroll to top on mount
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   // Animation variants - matching BlogList animations
   const containerVariants = {
@@ -76,7 +75,7 @@ const BlogPost = () => {
 
   if (!post || !categoryInfo) {
     return (
-      <div className="min-h-screen bg-aurora-night pt-20 pb-16 flex items-center justify-center">
+      <div className="min-h-screen pt-20 pb-16 flex items-center justify-center">
         <div className="text-center">
           <div className="text-6xl mb-4">📄</div>
           <h2 className="text-2xl font-bold text-aurora-text mb-2">
@@ -104,13 +103,13 @@ const BlogPost = () => {
         keywords={post.tags.join(", ")}
         type="article"
       />
-      <div className="min-h-screen bg-aurora-night">
+      <div className="min-h-screen">
         {/* Hero Section with Staggered Animations */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="pt-20 pb-16 bg-gradient-to-b from-aurora-night to-aurora-card/10"
+          className="pt-20 pb-16"
         >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Breadcrumb */}

@@ -30,10 +30,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         boxShadow: "0 20px 40px rgba(168, 85, 247, 0.15)",
         transition: { duration: 0.3, ease: "easeOut" },
       }}
-      className="group relative rounded-xl"
+      className="group relative rounded-xl w-full max-w-sm flex-shrink-0"
       style={{ borderRadius: "0.75rem" }}
     >
-      <div className="h-full bg-aurora-night/50 backdrop-blur-sm border border-aurora-blue/20 rounded-xl p-6 hover:border-aurora-purple/50 transition-all duration-300">
+      <div className="h-full bg-aurora-night/50 backdrop-blur-sm border border-aurora-blue/20 rounded-xl p-6 hover:border-aurora-purple/50 transition-all duration-300 flex flex-col min-h-[380px]">
         {/* Project Header */}
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
@@ -72,8 +72,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         </div>
 
         {/* Project Description */}
-        <p className="text-aurora-muted mb-6 leading-relaxed">
-          {project.description}
+        <p className="text-aurora-muted mb-6 leading-relaxed flex-grow">
+          {project.description.length > 150
+            ? `${project.description.substring(0, 150)}...`
+            : project.description}
         </p>
 
         {/* Tech Stack */}

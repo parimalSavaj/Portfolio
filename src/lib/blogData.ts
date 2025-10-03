@@ -1,33 +1,10 @@
-export interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  category: string;
-  author: string;
-  publishDate: string;
-  description: string;
-  content: string;
-  tags: string[];
-  readTime: number; // in minutes
-  featured?: boolean;
-}
-
-export interface BlogCategory {
-  id: string;
-  name: string;
-  slug: string;
-  description: string;
-  color: string;
-  icon: string;
-}
-
-// Blog Categories
-export const blogCategories: BlogCategory[] = [
+// Available Blog Categories - Add new categories here if needed
+export const blogCategories = [
   {
     id: "javascript",
     name: "JavaScript",
     slug: "javascript",
-    description: "Modern JavaScript development, ES6+, and best practices",
+    description: "JavaScript tips, tricks, and tutorials",
     color: "#f7df1e",
     icon: "⚡",
   },
@@ -35,7 +12,7 @@ export const blogCategories: BlogCategory[] = [
     id: "nodejs",
     name: "Node.js",
     slug: "node",
-    description: "Server-side JavaScript, APIs, and backend development",
+    description: "Backend development with Node.js",
     color: "#339933",
     icon: "🚀",
   },
@@ -43,719 +20,491 @@ export const blogCategories: BlogCategory[] = [
     id: "python",
     name: "Python",
     slug: "python",
-    description: "Python programming, data science, and automation",
+    description: "Python programming and data science",
     color: "#3776ab",
     icon: "🐍",
   },
+  {
+    id: "web-development",
+    name: "Web Development",
+    slug: "web-development",
+    description: "General web development topics",
+    color: "#61dafb",
+    icon: "🌐",
+  },
 ];
 
-// Sample Blog Posts
-export const blogPosts: BlogPost[] = [
+// Blog Posts - Add your new posts here
+export const blogPosts = [
   {
-    id: "js-async-patterns",
-    title: "Mastering Async/Await: Modern JavaScript Patterns",
-    slug: "mastering-async-await-patterns",
+    id: "getting-started-javascript",
+    title: "Getting Started with JavaScript",
+    slug: "getting-started-javascript",
     category: "javascript",
     author: "Your Name",
     publishDate: "2024-01-15",
     description:
-      "Learn how to effectively use async/await patterns in modern JavaScript applications, including error handling and performance optimization techniques.",
+      "Learn the basics of JavaScript programming and start building interactive web applications.",
     content: `
-# Mastering Async/Await: Modern JavaScript Patterns
+# Getting Started with JavaScript
 
-Asynchronous programming is at the heart of modern JavaScript development. Whether you're fetching data from APIs, reading files, or handling user interactions, understanding async/await patterns is crucial for building responsive applications.
+JavaScript is the programming language of the web. It's what makes websites interactive and dynamic.
 
-## Why Async/Await?
+## What is JavaScript?
 
-Before async/await, we relied on callbacks and promises, which often led to callback hell and complex promise chains. Async/await provides a cleaner, more readable syntax that makes asynchronous code look and behave more like synchronous code.
+JavaScript is a programming language that runs in web browsers. It allows you to:
+- Make websites interactive
+- Handle user clicks and input
+- Update content without refreshing the page
+- Create animations and effects
+
+## Your First JavaScript Code
+
+Here's a simple example:
 
 \`\`\`javascript
-// Old Promise-based approach
-function fetchUserData(userId) {
-  return fetch(\`/api/users/\${userId}\`)
-    .then(response => response.json())
-    .then(user => {
-      return fetch(\`/api/posts/\${user.id}\`);
-    })
-    .then(response => response.json())
-    .catch(error => {
-      console.error('Error:', error);
-    });
-}
+// Display a message
+console.log("Hello, World!");
 
-// Modern async/await approach
-async function fetchUserData(userId) {
-  try {
-    const userResponse = await fetch(\`/api/users/\${userId}\`);
-    const user = await userResponse.json();
-    
-    const postsResponse = await fetch(\`/api/posts/\${user.id}\`);
-    const posts = await postsResponse.json();
-    
-    return { user, posts };
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
-  }
+// Change text on a webpage
+document.getElementById("myText").textContent = "Welcome!";
+\`\`\`
+
+## Basic Concepts
+
+### Variables
+Store data in variables:
+\`\`\`javascript
+let name = "John";
+let age = 25;
+\`\`\`
+
+### Functions
+Create reusable code blocks:
+\`\`\`javascript
+function greet(name) {
+  return "Hello, " + name + "!";
 }
 \`\`\`
 
-## Error Handling Best Practices
+## Next Steps
 
-One of the most important aspects of async programming is proper error handling. Here are some patterns I recommend:
-
-### 1. Try-Catch Blocks
-Always wrap your async operations in try-catch blocks to handle potential errors gracefully.
-
-### 2. Custom Error Classes
-Create specific error types for different scenarios to make debugging easier.
-
-### 3. Graceful Degradation
-Provide fallback mechanisms when async operations fail.
-
-## Performance Optimization
-
-When working with multiple async operations, consider these optimization techniques:
-
-- **Parallel Execution**: Use \`Promise.all()\` for independent operations
-- **Sequential Execution**: Use await for dependent operations
-- **Timeout Handling**: Implement timeouts to prevent hanging requests
-
-## Conclusion
-
-Async/await has revolutionized how we write asynchronous JavaScript. By following these patterns and best practices, you'll write more maintainable and robust applications.
+1. Practice with simple examples
+2. Learn about DOM manipulation
+3. Try building small projects
+4. Explore modern JavaScript features
 
 Happy coding! 🚀
     `,
-    tags: ["javascript", "async", "promises", "es6", "best-practices"],
-    readTime: 8,
+    tags: ["javascript", "beginner", "tutorial"],
+    readTime: 5,
     featured: true,
   },
+
   {
-    id: "js-performance-tips",
-    title: "10 JavaScript Performance Tips That Actually Matter",
-    slug: "javascript-performance-tips-that-matter",
-    category: "javascript",
-    author: "Your Name",
-    publishDate: "2024-01-10",
-    description:
-      "Practical JavaScript performance optimization techniques that will make a real difference in your applications, from memory management to DOM manipulation.",
-    content: `
-# 10 JavaScript Performance Tips That Actually Matter
-
-Performance optimization in JavaScript isn't just about making your code run faster—it's about creating better user experiences. Here are 10 practical tips that will make a real difference in your applications.
-
-## 1. Minimize DOM Manipulation
-
-The DOM is slow. Every time you access or modify it, you're potentially triggering expensive operations.
-
-\`\`\`javascript
-// Slow: Multiple DOM queries
-document.getElementById('title').textContent = 'New Title';
-document.getElementById('subtitle').textContent = 'New Subtitle';
-document.getElementById('content').textContent = 'New Content';
-
-// Fast: Cache DOM references
-const elements = {
-  title: document.getElementById('title'),
-  subtitle: document.getElementById('subtitle'),
-  content: document.getElementById('content')
-};
-
-elements.title.textContent = 'New Title';
-elements.subtitle.textContent = 'New Subtitle';
-elements.content.textContent = 'New Content';
-\`\`\`
-
-## 2. Use Event Delegation
-
-Instead of attaching event listeners to multiple elements, use event delegation to handle events at a parent level.
-
-## 3. Debounce Expensive Operations
-
-For operations triggered by user input (like search), use debouncing to limit how often they execute.
-
-## 4. Optimize Loops
-
-Choose the right loop for the job and avoid unnecessary operations inside loops.
-
-## 5. Use Web Workers for Heavy Computations
-
-Move CPU-intensive tasks to Web Workers to keep the main thread responsive.
-
-## 6. Implement Lazy Loading
-
-Load resources only when they're needed, especially for images and components.
-
-## 7. Minimize Bundle Size
-
-Use tree shaking, code splitting, and dynamic imports to reduce your JavaScript bundle size.
-
-## 8. Cache API Responses
-
-Implement intelligent caching strategies to reduce network requests.
-
-## 9. Use RequestAnimationFrame for Animations
-
-For smooth animations, use requestAnimationFrame instead of setTimeout or setInterval.
-
-## 10. Profile and Measure
-
-Use browser dev tools to identify actual performance bottlenecks rather than guessing.
-
-## Conclusion
-
-Performance optimization is an ongoing process. Focus on measuring real-world impact and optimizing the bottlenecks that actually affect your users.
-
-Remember: premature optimization is the root of all evil, but informed optimization is the path to great user experiences! ⚡
-    `,
-    tags: ["javascript", "performance", "optimization", "dom", "web-workers"],
-    readTime: 12,
-    featured: false,
-  },
-  {
-    id: "nodejs-api-design",
-    title: "Building Scalable REST APIs with Node.js and Express",
-    slug: "building-scalable-rest-apis-nodejs-express",
+    id: "simple-nodejs-server",
+    title: "Building a Simple Node.js Server",
+    slug: "simple-nodejs-server",
     category: "nodejs",
     author: "Your Name",
     publishDate: "2024-01-12",
     description:
-      "A comprehensive guide to designing and building scalable REST APIs using Node.js and Express, including best practices for authentication, validation, and error handling.",
+      "Learn how to create a basic web server using Node.js in just a few lines of code.",
     content: `
-# Building Scalable REST APIs with Node.js and Express
+# Building a Simple Node.js Server
 
-Creating robust, scalable REST APIs is a fundamental skill for backend developers. In this comprehensive guide, we'll explore best practices for building APIs with Node.js and Express that can handle real-world traffic and complexity.
+Node.js allows you to run JavaScript on the server. Let's build a simple web server!
 
-## Project Setup and Structure
+## What You'll Need
 
-A well-organized project structure is the foundation of maintainable code:
+- Node.js installed on your computer
+- A text editor
+- Basic JavaScript knowledge
 
-\`\`\`
-src/
-├── controllers/
-├── middleware/
-├── models/
-├── routes/
-├── services/
-├── utils/
-└── app.js
-\`\`\`
+## Creating the Server
 
-## Essential Middleware
-
-Every production API needs these middleware components:
+Create a file called \`server.js\`:
 
 \`\`\`javascript
-const express = require('express');
-const helmet = require('helmet');
-const cors = require('cors');
-const rateLimit = require('express-rate-limit');
+// Import the http module
+const http = require('http');
 
-const app = express();
-
-// Security middleware
-app.use(helmet());
-app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
-  credentials: true
-}));
-
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+// Create a server
+const server = http.createServer((req, res) => {
+  // Set response headers
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  
+  // Send response
+  res.end('<h1>Hello from Node.js!</h1>');
 });
-app.use('/api/', limiter);
 
-// Body parsing
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+// Start the server
+server.listen(3000, () => {
+  console.log('Server running at http://localhost:3000');
+});
 \`\`\`
 
-## Authentication and Authorization
+## Running Your Server
 
-Implement JWT-based authentication with proper token management:
+1. Open terminal in your project folder
+2. Run: \`node server.js\`
+3. Open http://localhost:3000 in your browser
+4. You should see "Hello from Node.js!"
 
-\`\`\`javascript
-const jwt = require('jsonwebtoken');
+## Adding Routes
 
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ error: 'Access token required' });
-  }
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) {
-      return res.status(403).json({ error: 'Invalid or expired token' });
-    }
-    req.user = user;
-    next();
-  });
-};
-\`\`\`
-
-## Input Validation
-
-Use Joi or similar libraries for robust input validation:
+Make your server handle different URLs:
 
 \`\`\`javascript
-const Joi = require('joi');
-
-const validateUser = (req, res, next) => {
-  const schema = Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().min(8).required(),
-    name: Joi.string().min(2).max(50).required()
-  });
-
-  const { error } = schema.validate(req.body);
-  if (error) {
-    return res.status(400).json({
-      error: 'Validation failed',
-      details: error.details.map(detail => detail.message)
-    });
-  }
-  next();
-};
-\`\`\`
-
-## Error Handling
-
-Implement centralized error handling:
-
-\`\`\`javascript
-class AppError extends Error {
-  constructor(message, statusCode) {
-    super(message);
-    this.statusCode = statusCode;
-    this.isOperational = true;
-  }
-}
-
-const globalErrorHandler = (err, req, res, next) => {
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || 'error';
-
-  if (process.env.NODE_ENV === 'development') {
-    res.status(err.statusCode).json({
-      status: err.status,
-      error: err,
-      message: err.message,
-      stack: err.stack
-    });
+const server = http.createServer((req, res) => {
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  
+  if (req.url === '/') {
+    res.end('<h1>Home Page</h1>');
+  } else if (req.url === '/about') {
+    res.end('<h1>About Page</h1>');
   } else {
-    // Production error response
-    if (err.isOperational) {
-      res.status(err.statusCode).json({
-        status: err.status,
-        message: err.message
-      });
-    } else {
-      res.status(500).json({
-        status: 'error',
-        message: 'Something went wrong!'
-      });
-    }
+    res.end('<h1>Page Not Found</h1>');
   }
-};
-
-module.exports = { AppError, globalErrorHandler };
-\`\`\`
-
-## Database Integration
-
-Use connection pooling and proper error handling for database operations:
-
-\`\`\`javascript
-const { Pool } = require('pg');
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
-
-const query = async (text, params) => {
-  const client = await pool.connect();
-  try {
-    const result = await client.query(text, params);
-    return result;
-  } finally {
-    client.release();
-  }
-};
-\`\`\`
-
-## API Versioning
-
-Implement proper API versioning from the start:
-
-\`\`\`javascript
-// Version 1 routes
-app.use('/api/v1/users', require('./routes/v1/users'));
-app.use('/api/v1/posts', require('./routes/v1/posts'));
-
-// Version 2 routes (when needed)
-app.use('/api/v2/users', require('./routes/v2/users'));
-\`\`\`
-
-## Testing
-
-Write comprehensive tests for your API endpoints:
-
-\`\`\`javascript
-const request = require('supertest');
-const app = require('../app');
-
-describe('POST /api/v1/users', () => {
-  it('should create a new user', async () => {
-    const userData = {
-      email: 'test@example.com',
-      password: 'password123',
-      name: 'Test User'
-    };
-
-    const response = await request(app)
-      .post('/api/v1/users')
-      .send(userData)
-      .expect(201);
-
-    expect(response.body.user.email).toBe(userData.email);
-    expect(response.body.user.password).toBeUndefined();
-  });
 });
 \`\`\`
-
-## Deployment Considerations
-
-- Use environment variables for configuration
-- Implement health check endpoints
-- Set up proper logging with Winston or similar
-- Use PM2 for process management
-- Implement graceful shutdown handling
 
 ## Conclusion
 
-Building scalable REST APIs requires attention to security, performance, and maintainability. By following these patterns and best practices, you'll create APIs that can grow with your application's needs.
+You've built your first Node.js server! This is the foundation for building web applications, APIs, and more.
 
-Remember to always validate input, handle errors gracefully, and test thoroughly. Happy coding! 🚀
+Keep experimenting and building! 🚀
     `,
-    tags: ["nodejs", "express", "rest-api", "backend", "scalability"],
-    readTime: 15,
+    tags: ["nodejs", "server", "beginner", "tutorial"],
+    readTime: 4,
+    featured: false,
+  },
+
+  {
+    id: "python-basics",
+    title: "Python Programming Basics",
+    slug: "python-basics",
+    category: "python",
+    author: "Your Name",
+    publishDate: "2024-01-10",
+    description:
+      "Start your Python journey with the fundamental concepts and syntax.",
+    content: `
+# Python Programming Basics
+
+Python is a beginner-friendly programming language that's powerful and versatile.
+
+## Why Choose Python?
+
+- Easy to read and write
+- Great for beginners
+- Used in web development, data science, AI, and more
+- Large community and lots of resources
+
+## Getting Started
+
+### Variables and Data Types
+
+\`\`\`python
+# Numbers
+age = 25
+price = 19.99
+
+# Text (strings)
+name = "Alice"
+message = "Hello, World!"
+
+# True/False values
+is_student = True
+is_working = False
+\`\`\`
+
+### Lists (Arrays)
+
+\`\`\`python
+# Create a list
+fruits = ["apple", "banana", "orange"]
+
+# Add items
+fruits.append("grape")
+
+# Access items
+first_fruit = fruits[0]  # "apple"
+\`\`\`
+
+### Loops
+
+\`\`\`python
+# Loop through a list
+for fruit in fruits:
+    print(f"I like {fruit}")
+
+# Count from 1 to 5
+for i in range(1, 6):
+    print(f"Number: {i}")
+\`\`\`
+
+### Functions
+
+\`\`\`python
+def greet(name):
+    return f"Hello, {name}!"
+
+# Use the function
+message = greet("Alice")
+print(message)  # "Hello, Alice!"
+\`\`\`
+
+## Simple Project: Calculator
+
+\`\`\`python
+def calculator(num1, num2, operation):
+    if operation == "+":
+        return num1 + num2
+    elif operation == "-":
+        return num1 - num2
+    elif operation == "*":
+        return num1 * num2
+    elif operation == "/":
+        return num1 / num2
+    else:
+        return "Invalid operation"
+
+# Test it
+result = calculator(10, 5, "+")
+print(result)  # 15
+\`\`\`
+
+## Next Steps
+
+1. Practice with simple programs
+2. Learn about dictionaries and sets
+3. Try building small projects
+4. Explore Python libraries
+
+Python is an amazing language to learn. Start coding today! 🐍
+    `,
+    tags: ["python", "beginner", "programming", "tutorial"],
+    readTime: 6,
     featured: true,
   },
+
   {
-    id: "python-data-analysis",
-    title: "Python Data Analysis: From Pandas to Insights",
-    slug: "python-data-analysis-pandas-insights",
-    category: "python",
+    id: "responsive-web-design",
+    title: "Responsive Web Design Tips",
+    slug: "responsive-web-design",
+    category: "web-development",
     author: "Your Name",
     publishDate: "2024-01-08",
     description:
-      "Master data analysis with Python using pandas, numpy, and matplotlib. Learn to clean, analyze, and visualize data to extract meaningful insights.",
+      "Learn how to make websites that look great on all devices with these simple responsive design techniques.",
     content: `
-# Python Data Analysis: From Pandas to Insights
+# Responsive Web Design Tips
 
-Data analysis is one of Python's strongest use cases. With libraries like pandas, numpy, and matplotlib, Python provides a powerful toolkit for extracting insights from data. Let's explore how to go from raw data to actionable insights.
+Make your websites look great on phones, tablets, and desktops with these simple techniques.
 
-## Setting Up Your Environment
+## What is Responsive Design?
 
-First, let's set up our data analysis environment:
+Responsive design means your website automatically adjusts to different screen sizes. It looks good whether someone visits on a phone or a large desktop monitor.
 
-\`\`\`python
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from datetime import datetime
-import warnings
-warnings.filterwarnings('ignore')
+## Essential Techniques
 
-# Set up plotting style
-plt.style.use('seaborn-v0_8')
-sns.set_palette("husl")
+### 1. Use the Viewport Meta Tag
+
+Add this to your HTML head:
+\`\`\`html
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 \`\`\`
 
-## Loading and Exploring Data
+### 2. Flexible Layouts with CSS Grid/Flexbox
 
-The first step in any data analysis is understanding your data:
-
-\`\`\`python
-# Load data
-df = pd.read_csv('sales_data.csv')
-
-# Basic exploration
-print("Dataset shape:", df.shape)
-print("\\nColumn info:")
-print(df.info())
-print("\\nFirst few rows:")
-print(df.head())
-print("\\nBasic statistics:")
-print(df.describe())
-\`\`\`
-
-## Data Cleaning
-
-Real-world data is messy. Here's how to clean it:
-
-\`\`\`python
-# Check for missing values
-print("Missing values per column:")
-print(df.isnull().sum())
-
-# Handle missing values
-df['price'].fillna(df['price'].median(), inplace=True)
-df['category'].fillna('Unknown', inplace=True)
-
-# Remove duplicates
-df.drop_duplicates(inplace=True)
-
-# Fix data types
-df['date'] = pd.to_datetime(df['date'])
-df['price'] = pd.to_numeric(df['price'], errors='coerce')
-
-# Handle outliers using IQR method
-Q1 = df['price'].quantile(0.25)
-Q3 = df['price'].quantile(0.75)
-IQR = Q3 - Q1
-lower_bound = Q1 - 1.5 * IQR
-upper_bound = Q3 + 1.5 * IQR
-
-df = df[(df['price'] >= lower_bound) & (df['price'] <= upper_bound)]
-\`\`\`
-
-## Exploratory Data Analysis (EDA)
-
-Now let's explore patterns in our data:
-
-\`\`\`python
-# Distribution of numerical variables
-fig, axes = plt.subplots(2, 2, figsize=(12, 10))
-df['price'].hist(bins=30, ax=axes[0,0])
-axes[0,0].set_title('Price Distribution')
-
-df['quantity'].hist(bins=30, ax=axes[0,1])
-axes[0,1].set_title('Quantity Distribution')
-
-# Category analysis
-category_counts = df['category'].value_counts()
-category_counts.plot(kind='bar', ax=axes[1,0])
-axes[1,0].set_title('Sales by Category')
-axes[1,0].tick_params(axis='x', rotation=45)
-
-# Time series analysis
-df.set_index('date')['price'].resample('M').mean().plot(ax=axes[1,1])
-axes[1,1].set_title('Average Price Over Time')
-
-plt.tight_layout()
-plt.show()
-\`\`\`
-
-## Advanced Analysis Techniques
-
-### Correlation Analysis
-\`\`\`python
-# Correlation matrix
-correlation_matrix = df.select_dtypes(include=[np.number]).corr()
-plt.figure(figsize=(10, 8))
-sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', center=0)
-plt.title('Correlation Matrix')
-plt.show()
-\`\`\`
-
-### Groupby Operations
-\`\`\`python
-# Sales analysis by category
-category_analysis = df.groupby('category').agg({
-    'price': ['mean', 'sum', 'count'],
-    'quantity': ['mean', 'sum']
-}).round(2)
-
-print("Sales Analysis by Category:")
-print(category_analysis)
-\`\`\`
-
-### Time Series Analysis
-\`\`\`python
-# Create time-based features
-df['year'] = df['date'].dt.year
-df['month'] = df['date'].dt.month
-df['day_of_week'] = df['date'].dt.day_name()
-
-# Monthly trends
-monthly_sales = df.groupby(['year', 'month'])['price'].sum().reset_index()
-monthly_sales['date'] = pd.to_datetime(monthly_sales[['year', 'month']].assign(day=1))
-
-plt.figure(figsize=(12, 6))
-plt.plot(monthly_sales['date'], monthly_sales['price'], marker='o')
-plt.title('Monthly Sales Trend')
-plt.xlabel('Date')
-plt.ylabel('Total Sales')
-plt.xticks(rotation=45)
-plt.grid(True, alpha=0.3)
-plt.show()
-\`\`\`
-
-## Statistical Analysis
-
-### Hypothesis Testing
-\`\`\`python
-from scipy import stats
-
-# Compare sales between two categories
-category_a = df[df['category'] == 'Electronics']['price']
-category_b = df[df['category'] == 'Clothing']['price']
-
-# Perform t-test
-t_stat, p_value = stats.ttest_ind(category_a, category_b)
-print(f"T-statistic: {t_stat:.4f}")
-print(f"P-value: {p_value:.4f}")
-
-if p_value < 0.05:
-    print("Significant difference between categories")
-else:
-    print("No significant difference between categories")
-\`\`\`
-
-## Creating Insights Dashboard
-
-\`\`\`python
-def create_dashboard(df):
-    fig, axes = plt.subplots(2, 3, figsize=(18, 12))
-    
-    # KPI metrics
-    total_sales = df['price'].sum()
-    avg_order_value = df['price'].mean()
-    total_orders = len(df)
-    
-    # Sales by category pie chart
-    category_sales = df.groupby('category')['price'].sum()
-    axes[0,0].pie(category_sales.values, labels=category_sales.index, autopct='%1.1f%%')
-    axes[0,0].set_title('Sales Distribution by Category')
-    
-    # Monthly trend
-    monthly_trend = df.groupby(df['date'].dt.to_period('M'))['price'].sum()
-    monthly_trend.plot(kind='line', ax=axes[0,1], marker='o')
-    axes[0,1].set_title('Monthly Sales Trend')
-    axes[0,1].tick_params(axis='x', rotation=45)
-    
-    # Top products
-    top_products = df.groupby('product_name')['price'].sum().nlargest(10)
-    top_products.plot(kind='barh', ax=axes[0,2])
-    axes[0,2].set_title('Top 10 Products by Sales')
-    
-    # Price distribution
-    df['price'].hist(bins=30, ax=axes[1,0])
-    axes[1,0].set_title('Price Distribution')
-    axes[1,0].set_xlabel('Price')
-    axes[1,0].set_ylabel('Frequency')
-    
-    # Sales by day of week
-    day_sales = df.groupby('day_of_week')['price'].sum()
-    day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    day_sales = day_sales.reindex(day_order)
-    day_sales.plot(kind='bar', ax=axes[1,1])
-    axes[1,1].set_title('Sales by Day of Week')
-    axes[1,1].tick_params(axis='x', rotation=45)
-    
-    # Quantity vs Price scatter
-    axes[1,2].scatter(df['quantity'], df['price'], alpha=0.6)
-    axes[1,2].set_title('Quantity vs Price')
-    axes[1,2].set_xlabel('Quantity')
-    axes[1,2].set_ylabel('Price')
-    
-    plt.tight_layout()
-    plt.show()
-    
-    # Print KPIs
-    print("📊 Key Performance Indicators")
-    print("Total Sales: $" + str(total_sales))
-    print("Average Order Value: $" + str(avg_order_value))
-    print("Total Orders: " + str(total_orders))
-
-# Create the dashboard
-create_dashboard(df)
-\`\`\`
-
-## Exporting Results
-
-\`\`\`python
-# Create summary report
-summary_stats = {
-    'Total Sales': df['price'].sum(),
-    'Average Order Value': df['price'].mean(),
-    'Total Orders': len(df),
-    'Top Category': df.groupby('category')['price'].sum().idxmax(),
-    'Best Month': df.groupby(df['date'].dt.month)['price'].sum().idxmax()
+\`\`\`css
+/* Flexible container */
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-# Save to Excel with multiple sheets
-with pd.ExcelWriter('sales_analysis_report.xlsx') as writer:
-    df.to_excel(writer, sheet_name='Raw Data', index=False)
-    
-    category_summary = df.groupby('category').agg({
-        'price': ['sum', 'mean', 'count']
-    }).round(2)
-    category_summary.to_excel(writer, sheet_name='Category Analysis')
-    
-    pd.DataFrame([summary_stats]).to_excel(writer, sheet_name='Summary', index=False)
-
-print("Analysis complete! Report saved to 'sales_analysis_report.xlsx'")
+/* Items adjust automatically */
+.item {
+  flex: 1;
+  min-width: 300px;
+}
 \`\`\`
 
-## Best Practices for Data Analysis
+### 3. Media Queries
 
-1. **Always start with data exploration** - understand your data before diving into analysis
-2. **Clean your data thoroughly** - garbage in, garbage out
-3. **Visualize early and often** - plots reveal patterns that numbers can't
-4. **Document your process** - make your analysis reproducible
-5. **Validate your findings** - cross-check results with domain knowledge
-6. **Tell a story with your data** - insights without context are just numbers
+Change styles based on screen size:
+\`\`\`css
+/* Default styles for all screens */
+.header {
+  font-size: 24px;
+  padding: 20px;
+}
+
+/* Styles for tablets and smaller */
+@media (max-width: 768px) {
+  .header {
+    font-size: 20px;
+    padding: 15px;
+  }
+}
+
+/* Styles for phones */
+@media (max-width: 480px) {
+  .header {
+    font-size: 18px;
+    padding: 10px;
+  }
+}
+\`\`\`
+
+### 4. Responsive Images
+
+\`\`\`css
+img {
+  max-width: 100%;
+  height: auto;
+}
+\`\`\`
+
+## Common Breakpoints
+
+Use these screen sizes as starting points:
+- Mobile: 480px and below
+- Tablet: 481px to 768px
+- Desktop: 769px and above
+
+## Quick Tips
+
+1. **Test on real devices** - Simulators are good, but real testing is better
+2. **Start mobile-first** - Design for small screens first, then expand
+3. **Keep it simple** - Complex layouts are harder to make responsive
+4. **Use relative units** - Use % and em instead of fixed pixels when possible
+
+## Example: Simple Responsive Card
+
+\`\`\`css
+.card {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+@media (min-width: 768px) {
+  .card {
+    width: 45%;
+    display: inline-block;
+    margin: 10px;
+  }
+}
+\`\`\`
 
 ## Conclusion
 
-Python's data analysis ecosystem is incredibly powerful. By combining pandas for data manipulation, matplotlib/seaborn for visualization, and scipy for statistical analysis, you can extract meaningful insights from any dataset.
+Responsive design isn't just nice to have - it's essential. With these basic techniques, you can create websites that work beautifully on any device.
 
-The key to successful data analysis is asking the right questions and letting the data guide your exploration. Start simple, build complexity gradually, and always validate your findings.
-
-Happy analyzing! 📊🐍
+Start small, test often, and keep improving! 📱💻
     `,
-    tags: ["python", "pandas", "data-analysis", "visualization", "statistics"],
-    readTime: 18,
-    featured: true,
+    tags: ["css", "responsive", "web-design", "mobile"],
+    readTime: 7,
+    featured: false,
   },
 ];
 
-// Helper functions
-export const getBlogPostsByCategory = (category: string): BlogPost[] => {
-  return blogPosts.filter((post) => post.category === category);
-};
+// ===== HOW TO ADD NEW BLOG POSTS =====
+//
+// 1. Copy the template below
+// 2. Replace all the placeholder text with your content
+// 3. Add it to the blogPosts array above (inside the square brackets)
+// 4. Make sure to add a comma after the previous post
+//
+// TEMPLATE FOR NEW BLOG POST:
+/*
+{
+  id: "your-post-id",                    // Use lowercase with dashes, like "my-awesome-post"
+  title: "Your Blog Post Title",         // The title that appears on the page
+  slug: "your-post-url",                 // URL-friendly version (same as id usually)
+  category: "javascript",                // Must match one of the categories above
+  author: "Your Name",                   // Your name
+  publishDate: "2024-01-15",             // Date in YYYY-MM-DD format
+  description: "A short description of your post that appears in previews.",
+  content: `
+# Your Blog Post Title
 
-export const getBlogPostBySlug = (
-  category: string,
-  slug: string
-): BlogPost | undefined => {
-  return blogPosts.find(
-    (post) => post.category === category && post.slug === slug
-  );
-};
+Write your blog post content here using Markdown.
 
-export const getFeaturedPosts = (): BlogPost[] => {
-  return blogPosts.filter((post) => post.featured);
-};
+## You can use headings
 
-export const getAllPosts = (): BlogPost[] => {
-  return blogPosts.sort(
-    (a, b) =>
-      new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
-  );
-};
+### And subheadings
 
-export const getCategoryBySlug = (slug: string): BlogCategory | undefined => {
-  return blogCategories.find((category) => category.slug === slug);
-};
+You can write paragraphs normally.
+
+You can add code blocks like this:
+
+\`\`\`javascript
+function example() {
+  console.log("Hello, World!");
+}
+\`\`\`
+
+- You can make lists
+- With bullet points
+- Like this
+
+1. Or numbered lists
+2. Like this
+3. Easy!
+
+**Bold text** and *italic text* work too.
+
+Add links: [Link text](https://example.com)
+
+That's it! Keep it simple and helpful.
+  `,
+  tags: ["javascript", "tutorial", "beginner"],    // Array of relevant tags
+  readTime: 5,                                     // Estimated reading time in minutes
+  featured: false,                                 // Set to true if you want it featured
+},
+*/
+
+// EXAMPLE: How to add a new post
+// Just copy this example, modify it, and add it to the blogPosts array above:
+/*
+{
+  id: "my-first-post",
+  title: "My First Blog Post",
+  slug: "my-first-post",
+  category: "web-development",
+  author: "Your Name",
+  publishDate: "2024-01-20",
+  description: "This is my very first blog post where I share my thoughts on web development.",
+  content: `
+# My First Blog Post
+
+Welcome to my blog! I'm excited to share my journey in web development.
+
+## What I'm Learning
+
+I'm currently learning:
+- HTML and CSS
+- JavaScript basics
+- React framework
+
+## My Goals
+
+1. Build awesome websites
+2. Help other developers
+3. Keep learning new things
+
+Stay tuned for more posts!
+  `,
+  tags: ["personal", "web-development", "goals"],
+  readTime: 2,
+  featured: true,
+},
+*/

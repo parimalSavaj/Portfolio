@@ -25,6 +25,11 @@ export const skills = [
   "GraphQL",
   "Docker",
   "AWS",
+  "Python",
+  "MongoDB",
+  "PostgreSQL",
+  "Redis",
+  "Jest",
 ];
 
 // Projects
@@ -49,5 +54,19 @@ export const projects = [
     description:
       "A web-based application allowing multiple users to collaborate on documents in real-time, using WebSockets for instant updates.",
     techStack: ["React", "Node.js", "Socket.IO", "Docker"],
+  },
+  {
+    id: 4,
+    title: "AI-Powered Chat Bot",
+    description:
+      "An intelligent chatbot using natural language processing to provide customer support and automate common inquiries.",
+    techStack: ["Python", "TensorFlow", "FastAPI", "Redis"],
+  },
+  {
+    id: 5,
+    title: "Mobile Fitness Tracker",
+    description:
+      "A comprehensive cross-platform mobile application designed for tracking workouts, nutrition, and health metrics with advanced social sharing features, real-time progress monitoring, and personalized fitness recommendations.",
+    techStack: ["React Native", "TypeScript", "Firebase", "Expo"],
   },
 ];

@@ -108,6 +108,22 @@ nav button:focus-visible {
   animation: shimmer 2s infinite;
 }
 
+@keyframes rotate-bot {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-on-hover {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.group:hover .rotate-on-hover {
+  animation: rotate-bot 0.6s;
+}
+
 /* Aurora Dark Theme Custom Styles */
 @layer base {
   html {

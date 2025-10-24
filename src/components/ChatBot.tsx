@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { chatWithGemini } from "../features/chatbot/chatbotService";
 
 const ChatBot: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
-    { from: "bot", text: "Hi! How can I help you today?" },
+    { from: "bot", text: "Hi! I'm here to help you learn about this portfolio. Ask me anything about skills, projects, or experience!" },
   ]);
+  const [isLoading, setIsLoading] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false); // Track if animation has run
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -48,18 +50,30 @@ const ChatBot: React.FC = () => {
     };
   }, [open]);
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
-    setMessages((msgs) => [...msgs, { from: "user", text: input }]);
+    if (!input.trim() || isLoading) return;
+    
+    const userMessage = input;
+    setMessages((msgs) => [...msgs, { from: "user", text: userMessage }]);
     setInput("");
-    // Placeholder for bot response logic
-    setTimeout(() => {
+    setIsLoading(true);
+    
+    try {
+      const botResponse = await chatWithGemini(userMessage);
       setMessages((msgs) => [
         ...msgs,
-        { from: "bot", text: "This is a demo bot. I'll reply soon!" },
+        { from: "bot", text: botResponse },
       ]);
-    }, 800);
+    } catch (error) {
+      console.error("Chat error:", error);
+      setMessages((msgs) => [
+        ...msgs,
+        { from: "bot", text: "Sorry, I encountered an error. Please try again." },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -202,6 +216,17 @@ const ChatBot: React.FC = () => {
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div className="mb-2 flex justify-start">
+                <div className="px-3 py-2 rounded-lg text-sm bg-aurora-blue/20 text-aurora-text">
+                  <span className="inline-flex gap-1">
+                    <span className="animate-bounce" style={{ animationDelay: "0ms" }}>●</span>
+                    <span className="animate-bounce" style={{ animationDelay: "150ms" }}>●</span>
+                    <span className="animate-bounce" style={{ animationDelay: "300ms" }}>●</span>
+                  </span>
+                </div>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
           {/* Input */}
@@ -220,9 +245,9 @@ const ChatBot: React.FC = () => {
             <button
               type="submit"
               className="px-4 py-2 bg-gradient-to-r from-aurora-purple to-aurora-blue text-white rounded-lg font-semibold hover:scale-105 transition-transform duration-200 disabled:opacity-50"
-              disabled={!input.trim()}
+              disabled={!input.trim() || isLoading}
             >
-              Send
+              {isLoading ? "..." : "Send"}
             </button>
           </form>
         </div>

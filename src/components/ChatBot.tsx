@@ -90,7 +90,7 @@ const ChatBot: React.FC = () => {
               exit={{ opacity: 0, scale: 0.8 }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="fixed bottom-24 right-8 z-50 p-3 bg-gradient-to-r from-aurora-purple to-aurora-blue rounded-full shadow-lg hover:shadow-aurora-purple/50 transition-all duration-300 group focus:outline-none focus:ring-4 focus:ring-aurora-purple/30"
+              className="fixed bottom-20 right-4 sm:bottom-24 sm:right-8 z-50 p-3 sm:p-4 bg-gradient-to-r from-aurora-purple to-aurora-blue rounded-full shadow-lg hover:shadow-aurora-purple/50 transition-all duration-300 group focus:outline-none focus:ring-4 focus:ring-aurora-purple/30"
               onClick={() => setOpen((o) => !o)}
               aria-label="Open chat bot"
             >
@@ -100,7 +100,7 @@ const ChatBot: React.FC = () => {
                 height="24"
                 viewBox="0 0 24 24"
                 fill="none"
-                className="w-6 h-6 text-white rotate-on-hover"
+                className="w-5 h-5 sm:w-6 sm:h-6 text-white rotate-on-hover"
               >
                 <circle
                   cx="12"
@@ -130,7 +130,7 @@ const ChatBot: React.FC = () => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="fixed bottom-24 right-8 z-50 p-3 bg-gradient-to-r from-aurora-purple to-aurora-blue rounded-full shadow-lg hover:shadow-aurora-purple/50 transition-all duration-300 group focus:outline-none focus:ring-4 focus:ring-aurora-purple/30"
+              className="fixed bottom-20 right-4 sm:bottom-24 sm:right-8 z-50 p-3 sm:p-4 bg-gradient-to-r from-aurora-purple to-aurora-blue rounded-full shadow-lg hover:shadow-aurora-purple/50 transition-all duration-300 group focus:outline-none focus:ring-4 focus:ring-aurora-purple/30"
               onClick={() => setOpen((o) => !o)}
               aria-label="Open chat bot"
             >
@@ -140,7 +140,7 @@ const ChatBot: React.FC = () => {
                 height="24"
                 viewBox="0 0 24 24"
                 fill="none"
-                className="w-6 h-6 text-white rotate-on-hover"
+                className="w-5 h-5 sm:w-6 sm:h-6 text-white rotate-on-hover"
               >
                 <circle
                   cx="12"
@@ -168,11 +168,11 @@ const ChatBot: React.FC = () => {
       {open && (
         <div
           ref={chatWindowRef}
-          className="fixed bottom-40 right-8 z-50 w-80 max-w-[90vw] bg-aurora-night border border-aurora-purple/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in"
+          className="fixed bottom-2 right-2 left-2 sm:bottom-36 sm:right-8 sm:left-auto z-50 w-auto sm:w-96 max-w-[calc(100vw-1rem)] sm:max-w-[28rem] bg-aurora-night border border-aurora-purple/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in"
         >
           {/* Header */}
-          <div className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-aurora-purple to-aurora-blue text-white">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <div className="flex items-center gap-2 px-3 py-2.5 sm:px-4 sm:py-3 bg-gradient-to-r from-aurora-purple to-aurora-blue text-white">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="sm:w-7 sm:h-7">
               <circle
                 cx="12"
                 cy="12"
@@ -184,9 +184,9 @@ const ChatBot: React.FC = () => {
               <ellipse cx="15.5" cy="12" rx="1.5" ry="2" fill="#fff" />
               <rect x="9" y="16" width="6" height="1.5" rx="0.75" fill="#fff" />
             </svg>
-            <span className="font-semibold ml-2">Aurora ChatBot</span>
+            <span className="font-semibold ml-1 sm:ml-2 text-sm sm:text-base">Aurora ChatBot</span>
             <button
-              className="ml-auto text-white/70 hover:text-white text-xl font-bold focus:outline-none"
+              className="ml-auto text-white/70 hover:text-white text-2xl sm:text-xl font-bold focus:outline-none"
               onClick={() => setOpen(false)}
               aria-label="Close chat bot"
             >
@@ -195,8 +195,8 @@ const ChatBot: React.FC = () => {
           </div>
           {/* Messages */}
           <div
-            className="flex-1 px-4 py-3 overflow-y-auto bg-aurora-night/80"
-            style={{ maxHeight: 320 }}
+            className="flex-1 px-3 py-2 sm:px-4 sm:py-3 overflow-y-auto bg-aurora-night/80"
+            style={{ maxHeight: 'calc(100vh - 16rem)', minHeight: '200px' }}
           >
             {messages.map((msg, i) => (
               <div
@@ -206,7 +206,7 @@ const ChatBot: React.FC = () => {
                 }`}
               >
                 <div
-                  className={`px-3 py-2 rounded-lg text-sm max-w-[75%] ${
+                  className={`px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg text-xs sm:text-sm max-w-[85%] sm:max-w-[75%] ${
                     msg.from === "user"
                       ? "bg-aurora-purple text-white"
                       : "bg-aurora-blue/20 text-aurora-text"
@@ -218,7 +218,7 @@ const ChatBot: React.FC = () => {
             ))}
             {isLoading && (
               <div className="mb-2 flex justify-start">
-                <div className="px-3 py-2 rounded-lg text-sm bg-aurora-blue/20 text-aurora-text">
+                <div className="px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg text-xs sm:text-sm bg-aurora-blue/20 text-aurora-text">
                   <span className="inline-flex gap-1">
                     <span className="animate-bounce" style={{ animationDelay: "0ms" }}>●</span>
                     <span className="animate-bounce" style={{ animationDelay: "150ms" }}>●</span>
@@ -232,11 +232,11 @@ const ChatBot: React.FC = () => {
           {/* Input */}
           <form
             onSubmit={handleSend}
-            className="flex items-center gap-2 px-4 py-3 border-t border-aurora-purple/20 bg-aurora-night"
+            className="flex items-center gap-1.5 sm:gap-2 px-3 py-2.5 sm:px-4 sm:py-3 border-t border-aurora-purple/20 bg-aurora-night"
           >
             <input
               type="text"
-              className="flex-1 px-3 py-2 rounded-lg bg-aurora-night border border-aurora-purple/20 text-aurora-text placeholder-aurora-muted focus:outline-none focus:ring-2 focus:ring-aurora-purple/30"
+              className="flex-1 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg bg-aurora-night border border-aurora-purple/20 text-aurora-text placeholder-aurora-muted focus:outline-none focus:ring-2 focus:ring-aurora-purple/30 text-sm"
               placeholder="Type your message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -244,7 +244,7 @@ const ChatBot: React.FC = () => {
             />
             <button
               type="submit"
-              className="px-4 py-2 bg-gradient-to-r from-aurora-purple to-aurora-blue text-white rounded-lg font-semibold hover:scale-105 transition-transform duration-200 disabled:opacity-50"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-aurora-purple to-aurora-blue text-white rounded-lg text-sm font-semibold hover:scale-105 transition-transform duration-200 disabled:opacity-50"
               disabled={!input.trim() || isLoading}
             >
               {isLoading ? "..." : "Send"}

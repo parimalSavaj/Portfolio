@@ -1,5 +1,8 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, ChatSession } from "@google/generative-ai";
 import { personalInfo, socialLinks, skills, projects } from "../../lib/data";
+
+// Store chat session for conversation history
+let chatSession: ChatSession | null = null;
 
 // Initialize Gemini AI
 const getGeminiAPI = () => {
@@ -51,21 +54,46 @@ INSTRUCTIONS:
 `;
 };
 
-// Chat with Gemini using portfolio context
-export const chatWithGemini = async (userMessage: string): Promise<string> => {
-  try {
+// Initialize or get existing chat session
+const getChatSession = (): ChatSession => {
+  if (!chatSession) {
     const genAI = getGeminiAPI();
-    // Using gemini-1.5-flash for more free credits
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
+    // Start chat with portfolio context as system instruction
     const portfolioContext = getPortfolioContext();
-    const prompt = `${portfolioContext}
+    chatSession = model.startChat({
+      history: [
+        {
+          role: "user",
+          parts: [{ text: portfolioContext }],
+        },
+        {
+          role: "model",
+          parts: [
+            {
+              text: "I understand! I'm ready to help visitors learn about this portfolio. I have all the information about skills, projects, experience, and contact details. How can I assist?",
+            },
+          ],
+        },
+      ],
+    });
+  }
+  return chatSession;
+};
 
-User Question: ${userMessage}
+// Reset chat session (useful for starting fresh conversation)
+export const resetChatSession = () => {
+  chatSession = null;
+};
 
-Your Response:`;
+// Chat with Gemini using portfolio context with conversation history
+export const chatWithGemini = async (userMessage: string): Promise<string> => {
+  try {
+    const session = getChatSession();
 
-    const result = await model.generateContent(prompt);
+    // Send message and get response (maintains conversation history)
+    const result = await session.sendMessage(userMessage);
     const response = await result.response;
     const text = response.text();
 

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { chatWithGemini } from "../features/chatbot/chatbotService";
+import { chatWithGemini, resetChatSession } from "../features/chatbot/chatbotService";
 
 const ChatBot: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -74,6 +74,13 @@ const ChatBot: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleReset = () => {
+    resetChatSession();
+    setMessages([
+      { from: "bot", text: "Hi! I'm here to help you learn about this portfolio. Ask me anything about skills, projects, or experience!" },
+    ]);
   };
 
   return (
@@ -186,7 +193,15 @@ const ChatBot: React.FC = () => {
             </svg>
             <span className="font-semibold ml-1 sm:ml-2 text-sm sm:text-base">Aurora ChatBot</span>
             <button
-              className="ml-auto text-white/70 hover:text-white text-2xl sm:text-xl font-bold focus:outline-none"
+              className="ml-auto text-white/70 hover:text-white text-sm sm:text-xs px-2 py-1 rounded hover:bg-white/10 transition-colors focus:outline-none"
+              onClick={handleReset}
+              aria-label="Reset conversation"
+              title="Start new conversation"
+            >
+              ↻
+            </button>
+            <button
+              className="text-white/70 hover:text-white text-2xl sm:text-xl font-bold focus:outline-none"
               onClick={() => setOpen(false)}
               aria-label="Close chat bot"
             >

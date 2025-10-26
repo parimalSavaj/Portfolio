@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { personalInfo } from "../../lib/data";
+import { sendToTelegram } from "../../services/telegramService";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -79,26 +80,26 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // Formspree endpoint - replace with your actual Formspree endpoint
-      const response = await fetch(`https://formspree.io/f/your-form-id`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-          _replyto: formData.email,
-        }),
+      // Send message to Telegram
+      const result = await sendToTelegram({
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
       });
 
-      if (response.ok) {
+      if (result.success) {
         setIsSubmitted(true);
         setFormData({ name: "", email: "", message: "" });
+      } else {
+        console.error("Failed to send message:", result.error);
+        alert(
+          result.error ||
+            "Failed to send message. Please try again or contact directly via email."
+        );
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      alert("An error occurred. Please try again or contact directly via email.");
     }
 
     setIsSubmitting(false);

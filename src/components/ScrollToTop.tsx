@@ -14,8 +14,6 @@ const ScrollToTop = () => {
   };
 
   // Set the scroll event listener
-
-  
   useEffect(() => {
     window.addEventListener("scroll", toggleVisibility);
     return () => {
